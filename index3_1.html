@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div>   
+        <button id="inspect">Inspect</button>
+    </div>
+
+    <div>   
+        <button id="volumeUp">Volume Up</button>
+    </div>
+
+    <div>   
+        <button id="volumeDown">Volume Down</button>
+    </div>
+
+    <div>   
+        <button id="panLeft">Pan Left</button>
+    </div>
+
+    <div>   
+        <button id="panRight">Pan Right</button>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+        var video = document.createElement("video");
+        video.setAttribute("src", "sample.mp4");
+
+        video.controls = true;
+        video.autoplay = true;
+        document.body.appendChild(video);
+
+        var context = new AudioContext();
+        var gainNode = context.createGain();
+        var panner = context.createPanner();
+        var splitter = context.createChannelSplitter(2);
+
+        gainNode.connect(context.destination);
+        //panner.connect(gainNode);
+        //panner.connect(context.destination);
+        splitter.connect(gainNode);
+
+        gainNode.gain.value = 1;                   // Change Gain Value to test
+
+        // Wait for window.onload to fire. See crbug.com/112368
+        $(function() {
+          // Our <video> element will be the audio source.
+          var source = context.createMediaElementSource(video);
+          source.connect(panner);
+          panner.connect(gainNode);
+          gainNode.connect(context.destination);
+
+          $('#volumeUp').click(function(){
+                gainNode.gain.value = 1;
+            });
+
+            $('#volumeDown').click(function(){
+                gainNode.gain.value = 0;
+            });
+
+            $('#panLeft').click(function(){
+                panner.setPosition(-1, 0, 0);
+            });         
+
+            $('#panRight').click(function(){
+                panner.setPosition(1, 0, 0);
+            });   
+
+
+
+        });
+
+    </script>
+    </body>
+</html>

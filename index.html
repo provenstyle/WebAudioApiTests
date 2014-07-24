@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <video id="v" width="424" height="240" autoplay controls>
+            <source src="sample.mp4" type="video/mp4">
+
+        Your browser does not support the video tag.
+    </video>
+
+    <div>   
+        <button id="inspect">Inspect</button>
+    </div>
+
+    <div>   
+        <button id="volumeUp">Volume Up</button>
+    </div>
+
+    <div>   
+        <button id="volumeDown">Volume Down</button>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(function(){
+            console.log("Working");
+            var context, video, source, gainNode;
+            
+
+            $('#inspect').click(function(){
+                // MediaStreamTrack.getSources(function (sourceInfos) {
+                //     var audioSource = null;
+                //     var videoSource = null;
+
+                //     for (var i = 0; i != sourceInfos.length; ++i) {
+                //         var sourceInfo = sourceInfos[i];
+                //         if (sourceInfo.kind === 'audio') {
+                //             console.log(sourceInfo.id, sourceInfo.label || 'microphone');
+
+                //             audioSource = sourceInfo.id;
+                //         } else if (sourceInfo.kind === 'video') {
+                //             console.log(sourceInfo.id, sourceInfo.label || 'camera');
+
+                //             videoSource = sourceInfo.id;
+                //         } else {
+                //             console.log('Some other kind of source: ', sourceInfo);
+                //         }
+                //     }
+                // }); 
+
+                context = new AudioContext();
+                video = document.querySelector('#v');
+                source = context.createMediaElementSource(video);
+                gainNode = context.createGain();
+            });
+
+            $('volumeUp').click(function(){
+                gainNode.gain.value = 1;
+            });
+
+            $('volumeUp').click(function(){
+                gainNode.gain.value = 0;
+            });
+
+        });
+    </script>
+    </body>
+</html>

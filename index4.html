@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div>   
+        <button id="toggleLeft">Toggle Left</button>
+    </div>
+
+    <div>   
+        <button id="toggleRight">Toggle Right</button>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+        var video = document.createElement("video");
+        video.setAttribute("src", "sample.mp4");
+
+        video.controls = true;
+        video.autoplay = true;
+        document.body.appendChild(video);
+
+        var context = new AudioContext();
+        var leftGain = context.createGain();
+        var rightGain = context.createGain();
+        var splitter = context.createChannelSplitter(2);
+        var merger = context.createChannelMerger(2);
+
+        // Wait for window.onload to fire. See crbug.com/112368
+        $(function() {
+          // Our <video> element will be the audio source.
+          var source = context.createMediaElementSource(video);
+          source.connect(splitter);
+          splitter.connect(leftGain, 0);
+          splitter.connect(rightGain, 1);
+          leftGain.connect(merger, 0, 0);
+          rightGain.connect(merger, 0, 1);
+          merger.connect(context.destination);
+
+        $('#toggleLeft').click(function(){
+            if(leftGain.gain.value === 1){
+                leftGain.gain.value = 0;
+            }else{
+                leftGain.gain.value = 1;
+            }
+        });
+
+        $('#toggleRight').click(function(){
+            if(rightGain.gain.value === 1){
+                rightGain.gain.value = 0;
+            }else{
+                rightGain.gain.value = 1;
+            }
+        });
+
+
+
+
+        });
+
+    </script>
+    </body>
+</html>
